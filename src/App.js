@@ -6,6 +6,10 @@ import CustomersPage from './components/CustomersPage';
 import OrdersPage from './components/OrdersPage';
 import DriversPage from './components/DriversPage';
 import PaymentsPage from './components/PaymentsPage';
+import RegistrationPage from './components/RegistrationPage';
+import LoginPage from './components/LoginPage';
+import AdminDashboard from "./components/AdminDashboard";
+
 
 function App() {
   return (
@@ -17,6 +21,10 @@ function App() {
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/drivers" element={<DriversPage />} />
         <Route path="/payments" element={<PaymentsPage />} />
+        <Route path="/register" element={<RegistrationPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+
       </Routes>
     </div>
   );
