@@ -1,111 +1,104 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../assets/logo.png';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function OrdersPage() {
-  const [orders, setOrders] = useState([]);
-  const [newOrder, setNewOrder] = useState({ customerId: '', items: '', totalPrice: '', status: 'pending' });
+  const [orderId, setOrderId] = useState('');
+  const [customerId, setCustomerId] = useState('');
+  const [order, setOrder] = useState(null);
+  const [error, setError] = useState('');
 
-  const fetchOrders = async () => {
+  // Fetch Order Details
+  const fetchOrderDetails = async () => {
     try {
-      const response = await fetch('/api/orders');
+      const response = await fetch(`/api/orders/${orderId}?customerId=${customerId}`);
       const data = await response.json();
-      setOrders(data);
-    } catch (error) {
-      console.error('Error fetching orders:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const handleInputChange = (e) => {
-    setNewOrder({ ...newOrder, [e.target.name]: e.target.value });
-  };
-
-  const addOrder = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newOrder),
-      });
       if (response.ok) {
-        setNewOrder({ customerId: '', items: '', totalPrice: '', status: 'pending' });
-        fetchOrders();
+        setOrder(data);
+        setError('');
+      } else {
+        setError('Order not found or incorrect details!');
+        setOrder(null);
       }
     } catch (error) {
-      console.error('Error adding order:', error);
-    }
-  };
-
-  const updateOrderStatus = async (id, status) => {
-    try {
-      const response = await fetch(`/api/orders/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status }),
-      });
-      if (response.ok) {
-        fetchOrders();
-      }
-    } catch (error) {
-      console.error('Error updating order:', error);
-    }
-  };
-
-  const deleteOrder = async (id) => {
-    try {
-      const response = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
-      if (response.ok) {
-        fetchOrders();
-      }
-    } catch (error) {
-      console.error('Error deleting order:', error);
+      console.error('Error fetching order details:', error);
+      setError('Error retrieving order details. Please try again.');
     }
   };
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h2>Orders</h2>
-      <form onSubmit={addOrder}>
-        <input
-          type="text"
-          name="customerId"
-          placeholder="Customer ID"
-          value={newOrder.customerId}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="text"
-          name="items"
-          placeholder="Items (comma separated)"
-          value={newOrder.items}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="number"
-          name="totalPrice"
-          placeholder="Total Price"
-          value={newOrder.totalPrice}
-          onChange={handleInputChange}
-          required
-        />
-        <button type="submit">Add Order</button>
-      </form>
-      <ul>
-        {orders.map(order => (
-          <li key={order.id}>
-            Order #{order.id}: Customer {order.customerId} - {order.items} - ${order.totalPrice} - {order.status}
-            {order.status !== 'delivered' && (
-              <button onClick={() => updateOrderStatus(order.id, 'delivered')}>Mark as Delivered</button>
-            )}
-            <button onClick={() => deleteOrder(order.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+    <div className="d-flex flex-column min-vh-100">
+      {/* Header */}
+      <header className="bg-light py-3 shadow-sm">
+        <div className="container d-flex align-items-center justify-content-between">
+          <img src={logo} alt="Company Logo" style={{ height: '50px' }} />
+          <nav>
+            <Link to="/" className="btn btn-outline-primary me-2">Home</Link>
+            <Link to="/customers" className="btn btn-outline-secondary">Customers</Link>
+          </nav>
+        </div>
+      </header>
+
+      {/* Order Search Form */}
+      <div className="container flex-grow-1">
+        <h2 className="text-center mt-4">Track Your Order</h2>
+        <div className="card p-4 shadow-sm mt-3">
+          <h5>Enter Order Details</h5>
+          <div className="mb-3">
+            <label className="form-label">Order ID</label>
+            <input type="text" className="form-control" value={orderId} onChange={(e) => setOrderId(e.target.value)} required />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Customer ID</label>
+            <input type="text" className="form-control" value={customerId} onChange={(e) => setCustomerId(e.target.value)} required />
+          </div>
+          <button className="btn btn-primary w-100" onClick={fetchOrderDetails}>Check Order</button>
+        </div>
+
+        {/* Display Order Details */}
+        {error && <p className="text-danger text-center mt-3">{error}</p>}
+        {order && (
+          <div className="card p-4 shadow-sm mt-4">
+            <h5 className="text-center">Order Details</h5>
+            <table className="table table-bordered mt-3">
+              <tbody>
+                <tr>
+                  <th>Order ID</th>
+                  <td>{order.id}</td>
+                </tr>
+                <tr>
+                  <th>Customer ID</th>
+                  <td>{order.customerId}</td>
+                </tr>
+                <tr>
+                  <th>Items</th>
+                  <td>{order.items}</td>
+                </tr>
+                <tr>
+                  <th>Total Price (€)</th>
+                  <td>€{order.totalPrice.toFixed(2)}</td>
+                </tr>
+                <tr>
+                  <th>Status</th>
+                  <td>
+                    <span className={`badge ${order.status === 'delivered' ? 'bg-success' : 'bg-warning'}`}>
+                      {order.status}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-light py-3 text-center mt-auto">
+        <p className="mb-0">© {new Date().getFullYear()} Food Delivery Service | Contact: 045480435</p>
+        <p className="mb-0">Main Street, Kilcullen, Co. Kildare, Ireland</p>
+        <a href="https://www.alkebabishkilcullen.ie" target="_blank" rel="noopener noreferrer">Visit our website</a>
+      </footer>
     </div>
   );
 }
