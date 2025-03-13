@@ -3,70 +3,45 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function AdminDashboard() {
-  const [customers, setCustomers] = useState([]);
-  const [drivers, setDrivers] = useState([]);
-  const [orders, setOrders] = useState([]);
+  const [customer, setCustomer] = useState(null);
+  const [driver, setDriver] = useState(null);
+  const [order, setOrder] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [reportType, setReportType] = useState("earnings");
-  const [reportData, setReportData] = useState([]);
 
-  // Fetch All Data
+  // Fetch One Customer, One Driver, and One Order from Database
   useEffect(() => {
-    fetchCustomers();
-    fetchDrivers();
-    fetchOrders();
+    fetchCustomer();
+    fetchDriver();
+    fetchOrder();
   }, []);
 
-  const fetchCustomers = async () => {
+  const fetchCustomer = async () => {
     try {
-      const response = await fetch("/api/customers");
+      const response = await fetch("http://localhost:5000/api/customers/first");
       const data = await response.json();
-      setCustomers(data);
+      setCustomer(data);
     } catch (error) {
-      console.error("Error fetching customers:", error);
+      console.error("Error fetching customer:", error);
     }
   };
 
-  const fetchDrivers = async () => {
+  const fetchDriver = async () => {
     try {
-      const response = await fetch("/api/drivers");
+      const response = await fetch("http://localhost:5000/api/drivers/first");
       const data = await response.json();
-      setDrivers(data);
+      setDriver(data);
     } catch (error) {
-      console.error("Error fetching drivers:", error);
+      console.error("Error fetching driver:", error);
     }
   };
 
-  const fetchOrders = async () => {
+  const fetchOrder = async () => {
     try {
-      const response = await fetch("/api/orders");
+      const response = await fetch("http://localhost:5000/api/orders/first");
       const data = await response.json();
-      setOrders(data);
+      setOrder(data);
     } catch (error) {
-      console.error("Error fetching orders:", error);
-    }
-  };
-
-  // Search Functionality (Filter Data)
-  const filteredCustomers = customers.filter((customer) =>
-    customer.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredDrivers = drivers.filter((driver) =>
-    driver.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredOrders = orders.filter((order) =>
-    order.customerId.toString().includes(searchQuery)
-  );
-
-  // Generate Reports
-  const generateReport = () => {
-    if (reportType === "earnings") {
-      const totalEarnings = orders.reduce((sum, order) => sum + order.totalPrice, 0);
-      setReportData([{ title: "Total Earnings", value: `€${totalEarnings.toFixed(2)}` }]);
-    } else if (reportType === "customerOrders") {
-      setReportData(orders.filter((order) => order.customerId.toString() === searchQuery));
-    } else if (reportType === "driverDetails") {
-      setReportData(drivers.filter((driver) => driver.name.toLowerCase().includes(searchQuery.toLowerCase())));
+      console.error("Error fetching order:", error);
     }
   };
 
@@ -77,10 +52,9 @@ function AdminDashboard() {
         <h3 className="text-center">Admin Panel</h3>
         <ul className="nav flex-column">
           <li className="nav-item"><Link to="/" className="nav-link text-white">Home</Link></li>
-          <li className="nav-item"><a href="#" className="nav-link text-white">Customers</a></li>
-          <li className="nav-item"><a href="#" className="nav-link text-white">Drivers</a></li>
-          <li className="nav-item"><a href="#" className="nav-link text-white">Orders</a></li>
-          <li className="nav-item"><a href="#" className="nav-link text-white">Reports</a></li>
+          <li className="nav-item"><Link to="/admin/customers" className="nav-link text-white">Customers</Link></li>
+          <li className="nav-item"><Link to="/admin/drivers" className="nav-link text-white">Drivers</Link></li>
+          <li className="nav-item"><Link to="/admin/orders" className="nav-link text-white">Orders</Link></li>
         </ul>
       </nav>
 
@@ -99,86 +73,56 @@ function AdminDashboard() {
           />
         </div>
 
-        {/* Customer List */}
-        <h3>Customers</h3>
-        <table className="table">
-          <thead>
-            <tr><th>Name</th><th>Contact</th><th>Address</th></tr>
-          </thead>
-          <tbody>
-            {filteredCustomers.map((customer) => (
-              <tr key={customer.id}>
+        {/* Display One Customer */}
+        <h3>One Existing Customer</h3>
+        {customer ? (
+          <table className="table">
+            <thead>
+              <tr><th>Name</th><th>Contact</th><th>Address</th></tr>
+            </thead>
+            <tbody>
+              <tr>
                 <td>{customer.name}</td>
                 <td>{customer.contact}</td>
                 <td>{customer.address}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        ) : <p>No customer found.</p>}
 
-        {/* Driver List */}
-        <h3>Drivers</h3>
-        <table className="table">
-          <thead>
-            <tr><th>Name</th><th>Contact</th><th>Vehicle</th></tr>
-          </thead>
-          <tbody>
-            {filteredDrivers.map((driver) => (
-              <tr key={driver.id}>
+        {/* Display One Driver */}
+        <h3>One Existing Driver</h3>
+        {driver ? (
+          <table className="table">
+            <thead>
+              <tr><th>Name</th><th>Contact</th><th>Vehicle</th></tr>
+            </thead>
+            <tbody>
+              <tr>
                 <td>{driver.name}</td>
                 <td>{driver.contact}</td>
                 <td>{driver.vehicle}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        ) : <p>No driver found.</p>}
 
-        {/* Orders List */}
-        <h3>Orders</h3>
-        <table className="table">
-          <thead>
-            <tr><th>Order ID</th><th>Customer ID</th><th>Total Price</th></tr>
-          </thead>
-          <tbody>
-            {filteredOrders.map((order) => (
-              <tr key={order.id}>
+        {/* Display One Order */}
+        <h3>One Existing Order</h3>
+        {order ? (
+          <table className="table">
+            <thead>
+              <tr><th>Order ID</th><th>Customer ID</th><th>Total Price (€)</th></tr>
+            </thead>
+            <tbody>
+              <tr>
                 <td>{order.id}</td>
                 <td>{order.customerId}</td>
                 <td>€{order.totalPrice.toFixed(2)}</td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Reports Section */}
-        <h3>Generate Reports</h3>
-        <select className="form-control mb-2" onChange={(e) => setReportType(e.target.value)}>
-          <option value="earnings">Overall Earnings</option>
-          <option value="customerOrders">Specific Customer Orders</option>
-          <option value="driverDetails">Driver Details</option>
-        </select>
-        <button className="btn btn-primary" onClick={generateReport}>Generate Report</button>
-
-        {/* Report Output */}
-        <div className="mt-3">
-          {reportType === "earnings" ? (
-            <h5>{reportData.length > 0 && reportData[0].title}: {reportData.length > 0 && reportData[0].value}</h5>
-          ) : (
-            <table className="table">
-              <thead>
-                <tr>{reportType === "customerOrders" ? <th>Order ID</th> : <th>Name</th>}<th>Details</th></tr>
-              </thead>
-              <tbody>
-                {reportData.map((data, index) => (
-                  <tr key={index}>
-                    <td>{data.id || data.title}</td>
-                    <td>{data.items || data.value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
+            </tbody>
+          </table>
+        ) : <p>No order found.</p>}
       </div>
     </div>
   );
