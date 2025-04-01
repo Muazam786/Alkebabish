@@ -13,6 +13,7 @@
 /backend/pnp.js
 /node_modules
 /.pnp
+/tmp
 .pnp.js
 
 # testing
