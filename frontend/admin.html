@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard - Food Delivery</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="admin-wrapper">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <h3>Admin Panel</h3>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="customers.html">Customers</a></li>
+        <li><a href="drivers.html">Drivers</a></li>
+        <li><a href="orders.html">Orders</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="admin-content">
+      <h2>Admin Dashboard</h2>
+
+      <!-- Search Bar (static placeholder, for now) -->
+      <input type="text" id="searchInput" placeholder="Search Customers" />
+
+      <!-- Section for Customers -->
+      <section>
+        <h3>Customers</h3>
+        <div id="customerData">Loading...</div>
+      </section>
+
+      <!-- Section for Orders -->
+      <section>
+        <h3>Orders</h3>
+        <div id="orderData">Loading...</div>
+      </section>
+
+      <!-- Section for Drivers -->
+      <section>
+        <h3>Drivers</h3>
+        <div id="driverData">Loading...</div>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
