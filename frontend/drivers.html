@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Drivers - Food Delivery</title>
+</head>
+<body>
+  <nav class="navbar">
+    <img src="assets/logo.png" alt="Food Delivery Logo" />
+    <a href="index.html">Home</a>
+    <a href="customers.html">Food Menu</a>
+    <a href="orders.html">Track Order</a>
+  </nav>
+
+  <!-- Driver Management -->
+  <div class="container">
+    <h2 class="text-center">Drivers Management</h2>
+
+    <!-- Add Driver Form -->
+    <div class="card">
+      <h3>Add New Driver</h3>
+      <form id="addDriverForm">
+        <label>Name</label>
+        <input type="text" name="name" required />
+        <label>Vehicle Info</label>
+        <input type="text" name="vehicle_info" required />
+        <label>Status</label>
+        <input type="text" name="status" required />
+        <button type="submit">Add Driver</button>
+      </form>
+    </div>
+
+    <!-- Driver List -->
+    <h3 class="text-center">Driver List</h3>
+    <div id="driverList"></div>
+
+    <footer class="footer">
+      <p>© 2025 Food Delivery Service | Contact: 045480435</p>
+      <p>Main Street, Kilcullen, Co. Kildare, Ireland</p>
+      <a href="https://www.alkebabishkilcullen.ie" target="_blank">Visit our website</a>
+    </footer>
+  </div>
+</body>
+</html>
