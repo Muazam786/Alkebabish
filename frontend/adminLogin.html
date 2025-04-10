@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Login - Food Delivery</title>
+  <link rel="stylesheet" href="style.css" />
+  
+</head>
+<body>
+
+  <div class="login-wrapper">
+    <img src="assets/logo.png" alt="Logo" class="logo" />
+
+    <h2>Admin Login</h2>
+    <form id="loginForm">
+      <div>
+        <label for="username">Username</label>
+        <input type="text" id="username" required />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" required />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <p id="error-message">Invalid credentials. Please try again.</p>
+
+    <button class="back-button" onclick="goToHomepage()">Back to Homepage</button>
+  </div>
+
+
+</body>
+</html>
