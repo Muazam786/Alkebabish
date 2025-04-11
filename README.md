@@ -1,6 +1,6 @@
 #  Local Food Delivery System 
 A food delivery web application for an Alkebabish shop based in Kilcullen, built using HTML, CSS and JAVASCRIPT.
-Key Features
+## Key Features
 -User Registration & Login
 -View food menu
 -Add items to the cart
