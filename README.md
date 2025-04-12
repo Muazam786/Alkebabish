@@ -14,8 +14,8 @@ A food delivery web application for an Alkebabish shop based in Kilcullen, built
 -Login  
 -Register/Signup  
 -Payments
-## Backend server.js
--All required pakages like API,MYsql connection  
+## Backend server.js  
+-All required packages like API, MySQL connection  established
 -
 
 
