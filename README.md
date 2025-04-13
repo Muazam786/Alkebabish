@@ -1,4 +1,11 @@
 #  Local Food Delivery System 
+
+## Student Info
+
+- **Name:** Muazam Iftikhar
+- **Student ID:** (20054806)
+- **Module:** B9IS123
+- **Instructor:** (Paul Laird)
 A food delivery web application for an Alkebabish shop based in Kilcullen, built using HTML, CSS and JAVASCRIPT.
 ## Key Features
 -User Registration & Login.  
