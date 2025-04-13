@@ -45,5 +45,20 @@
       </section>
     </div>
   </div>
+  <script src="admin.js"></script>
+  <script>
+  // Logout functionality
+  document.getElementById('logoutButton').addEventListener('click', function() {
+    localStorage.removeItem('adminLoggedIn'); // Remove the login information from localStorage
+    window.location.href = 'adminlogin.html'; // Redirect to login page
+  });
+
+  // Check if the admin is logged in
+  if (!localStorage.getItem("adminLoggedIn")) {
+    // If not logged in, redirect to login page
+    window.location.href = "adminlogin.html";
+  }
+
+</script>
 </body>
 </html>
