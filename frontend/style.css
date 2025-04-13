@@ -2,3 +2,84 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
   }
+  .navbar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f8f8;
+    padding: 1rem;
+  }
+  
+  .navbar a {
+    margin-right: 1rem;
+    text-decoration: none;
+    color: #000;
+  }
+  
+  .auth-buttons button {
+    margin-left: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-blue {
+    background-color: #007bff;
+  }
+  
+  .btn-green {
+    background-color: #28a745;
+  }
+  
+  .banner img {
+    width: 100%;
+    max-height: 1100px;
+    object-fit: cover;
+  }
+  
+  .main-content {
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .main-content img {
+    width: 100%;
+    max-width: 1000px;
+    margin: 1rem auto;
+  }
+  
+  .footer {
+    background-color: #f8f8f8;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .menu-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .menu-card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    width: 250px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #fefefe;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+  
+  .menu-card button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
