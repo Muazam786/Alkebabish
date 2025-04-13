@@ -74,4 +74,52 @@ function renderCart() {
     <button onclick="placeOrder()">Place Order</button>`;
   container.innerHTML = cartHTML;
 }
+// Place order
+function placeOrder() {
+  const token = localStorage.getItem("token");
+  // if (!token) {
+  //   alert("You must be signed in to place an order!");
+  //   window.location.href = "login.html";
+  //   return;
+  // }
+
+  const customerId = 6; // You can dynamically retrieve this from local storage or session
+  const orderDetails = cart.map(item => item.name).join(', '); // Order details as a comma-separated string
+  const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
+
+  const orderData = {
+    customerId: customerId,
+    orderDetails: orderDetails,
+    totalPrice: totalPrice
+  };
+
+  fetch('http://localhost:5000/api/placeOrder', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(orderData)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.message === 'Order placed successfully.') {
+      alert('Order placed successfully!');
+      cart = []; // Clear the cart after placing the order
+      renderCart(); // Re-render the cart
+    } else {
+      alert('Failed to place order. Please try again.');
+    }
+  })
+  .catch(err => {
+    console.error('Error placing order:', err);
+    alert('Server error. Please try again.');
+  });
+}
+
+// Initialize page
+window.onload = () => {
+  renderMenu();
+  renderCart();
+};
 
