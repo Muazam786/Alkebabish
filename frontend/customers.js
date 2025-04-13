@@ -22,4 +22,56 @@ const menu = [
     { id: 21, category: "Kids Meal", name: "Kids Pizza Meal", price: 7.00 },
     { id: 22, category: "Kids Meal", name: "Kids Nuggets Meal", price: 4.99 }
   ];
-  
+  let cart = [];
+
+// Render menu items
+function renderMenu() {
+  const container = document.getElementById("menuContainer");
+  container.innerHTML = "";
+
+  menu.forEach((item) => {
+    const card = document.createElement("div");
+    card.className = "menu-card";
+    card.innerHTML = `
+      <h3>${item.name}</h3>
+      <p>${item.category}</p>
+      <p><strong>€${item.price.toFixed(2)}</strong></p>
+      <button onclick="addToCart(${item.id})">Add to Cart</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// Add item to cart
+function addToCart(id) {
+  const item = menu.find(i => i.id === id);
+  cart.push(item);
+  renderCart();
+}
+
+// Remove item from cart
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  renderCart();
+}
+
+// Render cart
+function renderCart() {
+  const container = document.getElementById("cartContainer");
+  if (cart.length === 0) {
+    container.innerHTML = "<p class='text-center'>Your cart is empty.</p>";
+    return;
+  }
+
+  let total = cart.reduce((sum, item) => sum + item.price, 0);
+  let cartHTML = `<ul>`;
+  cart.forEach((item, index) => {
+    cartHTML += `<li>${item.name} - €${item.price.toFixed(2)} 
+      <button onclick="removeFromCart(${index})">Remove</button></li>`;
+  });
+  cartHTML += `</ul>
+    <h4>Total: €${total.toFixed(2)}</h4>
+    <button onclick="placeOrder()">Place Order</button>`;
+  container.innerHTML = cartHTML;
+}
+
