@@ -4,7 +4,26 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 require('dotenv').config();
 
-const app = express();// Register endpoint to create a new user
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// MySQL database connection
+const db = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
+// Connect to the database
+db.connect((err) => {
+  if (err) {
+    console.error('Database connection failed:', err.stack);
+    return;
+  }
+  console.log('Connected to MySQL database.');
+});
+// Register endpoint to create a new user
 app.post('/api/register', async (req, res) => {
   const { username, password, role } = req.body;
 
@@ -45,25 +64,43 @@ app.post('/api/register', async (req, res) => {
     res.status(500).json({ error: 'Error registering user. Please try again.' });
   }
 });
-
-app.use(cors());
-app.use(express.json());
-
-// MySQL database connection
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-});
-
-// Connect to the database
-db.connect((err) => {
-  if (err) {
-    console.error('Database connection failed:', err.stack);
-    return;
+// Login endpoint for user authentication
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+  // Validate input
+  if (!username || !password) {
+    return res.status(400).json({ error: 'Username and password are required.' });
   }
-  console.log('Connected to MySQL database.');
+
+  try {
+    // Check if the username exists
+    const query = 'SELECT * FROM customers WHERE username = ?';
+    db.query(query, [username], async (err, results) => {
+      if (err) {
+        console.error('Error fetching user:', err);
+        return res.status(500).json({ error: 'Error fetching user. Please try again.' });
+      }
+
+      if (results.length === 0) {
+        return res.status(400).json({ error: 'Invalid credentials.' });
+      }
+
+      const user = results[0];
+
+      // Compare the entered password with the hashed password in the database
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return res.status(400).json({ error: 'Invalid credentials.' });
+      }
+
+      // Login successful
+      res.status(200).json({ message: 'Login successful!' });
+    });
+  } catch (err) {
+    console.error('Error during login:', err);
+    res.status(500).json({ error: 'An error occurred during login. Please try again.' });
+  }
 });
 
 // Server setup
