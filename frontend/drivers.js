@@ -46,4 +46,25 @@ async function deleteDriver(id) {
     alert("An error occurred while deleting the driver.");
   }
 }
+// Edit a driver
+async function editDriver(id) {
+  const name = prompt("Enter new name:");
+  const vehicle_info = prompt("Enter new vehicle info:");
+  const status = prompt("Enter new status:");
+
+  const updatedDriver = {
+    name,
+    vehicle_info,
+    status
+  };
+
+  const res = await fetch(`http://localhost:5000/api/drivers/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedDriver),
+  });
+  if (res.ok) {
+    loadDrivers();
+  }
+}
 
