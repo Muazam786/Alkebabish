@@ -103,6 +103,54 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// Endpoint to fetch all customers
+app.get('/api/customers', (req, res) => {
+  const query = 'SELECT * FROM customers';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching customers:', err);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+    res.json(results);
+  });
+});
+
+// Endpoint to fetch all orders
+app.get('/api/orders', (req, res) => {
+  const { customerId } = req.query; // Get customerId from query parameters
+
+  if (!customerId) {
+    return res.status(400).json({ error: 'Customer ID is required.' });
+  }
+
+  // SQL query to fetch all orders by customerId
+  const query = 'SELECT * FROM orders WHERE customer_id = ?';
+  db.query(query, [customerId], (err, results) => {
+    if (err) {
+      console.error('Error fetching orders:', err);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ error: 'No orders found for this customer.' });
+    }
+
+    res.json(results); // Return all the orders for the customer
+  });
+});
+
+// Endpoint to fetch all drivers
+app.get('/api/drivers', (req, res) => {
+  const query = 'SELECT * FROM drivers';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error fetching drivers:', err);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+    res.json(results);
+  });
+});
+
 // Server setup
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
