@@ -3,9 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Track Order - Food Delivery</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <nav class="navbar">
+        <img src="assets/logo.png" alt="Food Delivery Logo" />
+        <a href="index.html">Home</a>
+        <a href="customers.html">Food Menu</a>
+        <a href="orders.html">Track Order</a>
+        <a href="admin.html">Admin Login</a>
+        <div class="auth-buttons">
+          <a href="login.html"><button class="btn btn-blue">Sign In</button></a>
+          <a href="register.html"><button class="btn btn-green">Sign Up</button></a>
+        </div>
+    </nav>
     
+    
+      <div class="container">
+        <h2 class="text-center">Track Your Order</h2>
+    
+        <div class="card">
+          <h3>Enter Customer ID</h3>
+          <label>Customer ID</label>
+          <input type="text" id="customerId" placeholder="Enter Customer ID" required />
+          <button id="checkOrderButton">Check Orders</button>
+        </div>
+    
+        <div id="errorMsg" class="error-message"></div>
+        <div id="orderDetails" class="card hidden"></div>
+      </div>
+    
+      <!-- 🔗 Footer -->
+      <footer class="footer">
+        <p>© 2025 Food Delivery Service | Contact: 045480435</p>
+        <p>Main Street, Kilcullen, Co. Kildare, Ireland</p>
+        <a href="https://www.alkebabishkilcullen.ie" target="_blank" rel="noopener noreferrer">Visit our website</a>
+      </footer>
+    
+      <script src="orders.js"></script>
 </body>
 </html>
