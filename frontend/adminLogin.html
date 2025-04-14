@@ -105,7 +105,37 @@
 
     <button class="back-button" onclick="goToHomepage()">Back to Homepage</button>
   </div>
+  <script>
+    // Hardcoded admin username and password
+    const ADMIN_USERNAME = "admin";
+    const ADMIN_PASSWORD = "admin123";
 
+
+    // Handle form submission
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // Prevent the form from submitting normally
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      // Check if the entered credentials match the hardcoded ones
+      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+        // Save login status in localStorage
+        localStorage.setItem("adminLoggedIn", true);
+        // Redirect to the admin page
+        window.location.href = "admin.html";
+      } else {
+        // Display error message if credentials are incorrect
+        document.getElementById("error-message").style.display = "block";
+      }
+    });
+    
+
+    // Function to redirect to the homepage
+    function goToHomepage() {
+      window.location.href = "index.html"; // Change this to your homepage URL
+    }
+  </script>
 
 </body>
 </html>
