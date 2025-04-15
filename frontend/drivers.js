@@ -67,4 +67,36 @@ async function editDriver(id) {
     loadDrivers();
   }
 }
+// Load the driver list
+async function loadDrivers() {
+  const res = await fetch("http://localhost:5000/api/drivers");
+  const drivers = await res.json();
+
+  if (drivers.length === 0) {
+    driverListEl.innerHTML = "<p class='text-center'>No drivers found.</p>";
+    return;
+  }
+
+  let html = `<table><thead><tr>
+    <th>Name</th><th>Vehicle Info</th><th>Status</th><th>Actions</th>
+  </tr></thead><tbody>`;
+
+  drivers.forEach(driver => {
+    html += `<tr>
+      <td>${driver.name}</td>
+      <td>${driver.vehicle_info}</td>
+      <td>${driver.status}</td>
+      <td>
+        <button onclick="editDriver(${driver.id})">Edit</button>
+        <button onclick="deleteDriver(${driver.id})">Delete</button>
+      </td>
+    </tr>`;
+  });
+
+  html += "</tbody></table>";
+  driverListEl.innerHTML = html;
+}
+// Load the driver list when the page loads
+window.onload = loadDrivers;
+
 
