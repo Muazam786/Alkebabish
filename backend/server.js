@@ -167,8 +167,76 @@ app.post('/api/drivers', (req, res) => {
     res.status(201).json({ message: 'Driver added successfully.' });
   });
 });
+// Delete a driver by id
+app.delete('/api/drivers/:id', (req, res) => {
+  const { id } = req.params;
 
+  // SQL query to delete the driver by id
+  const query = 'DELETE FROM drivers WHERE id = ?';
 
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Error deleting driver:', err);
+      return res.status(500).json({ error: 'Failed to delete driver.' });
+    }
+
+    // If no driver was found, return a 404
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Driver not found.' });
+    }
+
+    res.status(200).json({ message: 'Driver deleted successfully.' });
+  });
+});
+
+// Edit a driver by id
+app.put('/api/drivers/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, vehicle_info, status } = req.body;
+
+  if (!name || !vehicle_info || !status) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+
+  const query = 'UPDATE drivers SET name = ?, vehicle_info = ?, status = ? WHERE id = ?';
+  db.query(query, [name, vehicle_info, status, id], (err, result) => {
+    if (err) {
+      console.error('Error editing driver:', err);
+      return res.status(500).json({ error: 'Failed to edit driver.' });
+    }
+    res.status(200).json({ message: 'Driver updated successfully.' });
+  });
+});
+
+// Place an order (store order details in the database)
+app.post('/api/placeOrder', (req, res) => {
+  const { customerId, orderDetails, totalPrice } = req.body;
+  console.log('Received order details:', req.body); 
+
+  // Validate inputs
+  if (!customerId || !orderDetails || !totalPrice) {
+    return res.status(400).json({ error: 'Customer ID, order details, and total price are required.' });
+  }
+
+  const status = 'Pending'; // Default status
+
+  // SQL query to insert the order into the database
+  const query = 'INSERT INTO orders (customer_id, order_details, total_price, status, created_at) VALUES (?, ?, ?, ?, NOW())';
+
+  db.query(query, [customerId, orderDetails, totalPrice, status], (err, result) => {
+    if (err) {
+      console.error('Error placing order:', err);
+      return res.status(500).json({ error: 'Failed to place order. Please try again.' });
+    }
+
+    res.status(201).json({ message: 'Order placed successfully.', orderId: result.insertId });
+  });
+});
+
+app.get('/', (req, res) => {
+  res.send('Welcome to the backend API!');
+}
+);
 // Server setup
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
