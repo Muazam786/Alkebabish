@@ -150,6 +150,24 @@ app.get('/api/drivers', (req, res) => {
     res.json(results);
   });
 });
+// Add a new driver
+app.post('/api/drivers', (req, res) => {
+  const { name, vehicle_info, status } = req.body;
+
+  if (!name || !vehicle_info || !status) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+
+  const query = 'INSERT INTO drivers (name, vehicle_info, status) VALUES (?, ?, ?)';
+  db.query(query, [name, vehicle_info, status], (err, result) => {
+    if (err) {
+      console.error('Error adding driver:', err);
+      return res.status(500).json({ error: 'Failed to add driver. Please try again.' });
+    }
+    res.status(201).json({ message: 'Driver added successfully.' });
+  });
+});
+
 
 // Server setup
 const PORT = process.env.PORT || 5000;
